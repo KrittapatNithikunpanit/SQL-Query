@@ -1,0 +1,70 @@
+---------------------------Write a DDL to create a table------------------------
+CREATE TABLE employees (
+    	employee_id INT UNIQUE NOT NULL,
+    	fname TEXT NOT NULL,
+    	lname TEXT NOT NULL,
+    	position TEXT NOT NULL,
+    	department TEXT NOT NULL,
+    	join_date DATE NOT NULL,
+   	salary REAL NOT NULL,
+    	PRIMARY KEY (employee_id)
+);
+INSERT INTO employees VALUES
+    	(1, 'David', 'Onail', 'Marketing Officer', 'Marketing', '2020-01-01', 45000),
+   	  (2, 'David', 'Spark', 'R&D Supervisor', 'R&D', '2019-10-28', 80000),
+    	(3, 'Tony', 'Stark', 'Innovation Manager', 'Innovation', '2023-02-02', 150000),
+    	(4, 'Tony', 'Stark', 'Innovation Supervisor', 'Innovation','2019-12-01',75000),
+    	(5, 'David', 'Onail', 'Marketing Officer', 'Marketing', '2020-01-01', 45000);
+
+----------------------------------------------------------------------------------
+Remove Duplicate [option 1] - Create new distinct table > delete original table > rename new table as original name
+----------------------------------------------------------------------------------
+  
+CREATE TABLE new_employee as
+    	SELECT DISTINCT fname, lname, position, join_date
+    	FROM employees;
+DROP TABLE employees;
+ALTER TABLE new_employee
+RENAME TO employees;
+
+----------------------------------------------------------------------------------
+Remove Duplicate [option 2] - DELETE duplicate record with ability to select which record we want to delete by sorting data after PARTITION clause
+----------------------------------------------------------------------------------
+
+DELETE FROM employees
+WHERE employee_id IN(
+   		 SELECT employee_id
+   		 FROM (
+       			 SELECT employee_id,
+       			 ROW_NUMBER() OVER(PARTITION BY fname, lname ORDER BY join_date DESC) AS rownum
+       			 FROM employees
+   		 )
+    		WHERE rownum > 1
+);
+
+----------------------------------------------------------------------------------
+Remove Duplicate [option 3] - only want to extract distinct data for further use, don’t want to make any change in  database 
+----------------------------------------------------------------------------------
+
+SELECT DISTINCT
+    	fname,
+    	lname,
+   	  position,
+    	department,
+   	  join_date,
+    	salary
+FROM employees;
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
