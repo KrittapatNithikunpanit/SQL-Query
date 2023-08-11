@@ -1,0 +1,34 @@
+CREATE TABLE hierarchical_table (
+	Level 1 TEXT NOT NULL,
+	Level 2 TEXT NOT NULL,
+	Level 3 TEXT NOT NULL,
+	Level 4 TEXT NOT NULL
+)
+
+
+INSERT INTO hierarchical_table VALUES
+	(“Tony”, “Stark”, “Hopewell”, “Roger”),
+	(“Tony”, “Stark”, “Chris”, “Pony”),
+	(“Tony”, “Stark”, “Patrick”, “Owen),
+	(“Tony”, “Stark”, “Kingmans”, “Derby”)
+
+
+SELECT
+	MAX(CASE WHEN level_group = 'Level 1' THEN level END) AS 'Level 1',
+	MAX(CASE WHEN level_group = 'Level 2' THEN level END) AS 'Level 2',
+	MAX(CASE WHEN level_group = 'Level 3' THEN level END) AS 'Level 3',
+	MAX(CASE WHEN level_group = 'Level 4' THEN level END) AS 'Level 4'
+FROM( 
+	SELECT *,
+		ROW_NUMBER() OVER( PARTITION BY level_group ORDER BY level) AS rn
+	FROM (
+		SELECT *,
+			CASE
+			WHEN level_id >=1 AND level_id <=3 THEN 'Level 1'
+			WHEN level_id >=4 AND level_id <=6 THEN 'Level 2'
+			WHEN level_id >=7 AND level_id <=9 THEN 'Level 3'
+			WHEN level_id >=10 AND level_id <=12 THEN 'Level 4'
+			END AS level_group
+		FROM hierarchical_table
+	) 
+)GROUP BY rn;
