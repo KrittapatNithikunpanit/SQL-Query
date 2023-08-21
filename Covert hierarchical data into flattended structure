@@ -1,34 +1,44 @@
 CREATE TABLE hierarchical_table (
-	Level1 TEXT NOT NULL,
-	Level2 TEXT NOT NULL,
-	Level3 TEXT NOT NULL,
-	Level4 TEXT NOT NULL
+    level_id INT NOT NULL,
+    country TEXT NOT NULL
 );
 
 
 INSERT INTO hierarchical_table VALUES
-	(“Tony”, “Stark”, “Hopewell”, “Roger”),
-	(“Tony”, “Stark”, “Chris”, “Pony”),
-	(“Tony”, “Stark”, “Patrick”, “Owen),
-	(“Tony”, “Stark”, “Kingmans”, “Derby”)
+	(1, "Europe"),
+    (2, "UK"),
+    (5, "England"),
+    (6, "Wales"),
+    (7, "Scotland"),
+    (8, "Ireland"),
+    (9, "Greater London"),
+    (10, "Cornwall"),
+    (11, "Highlands"),
+    (12, "Derby");
 
+--Assuming that we grouping data by level ID to be level_grouping as follow :
+-- 1 >= Level ID <= 3 : Level 1
+-- 4 >= Level ID <= 6 : Level 2
+-- 7 >= Level ID <= 9 : Level 3
+-- 10 >= Level ID <= 12 : Level 4
+-- So, there will be 4 level_group. Let’s write a query >>
 
 SELECT
-	MAX(CASE WHEN level_group = 'Level 1' THEN level END) AS 'Level 1',
-	MAX(CASE WHEN level_group = 'Level 2' THEN level END) AS 'Level 2',
-	MAX(CASE WHEN level_group = 'Level 3' THEN level END) AS 'Level 3',
-	MAX(CASE WHEN level_group = 'Level 4' THEN level END) AS 'Level 4'
+    MAX(CASE WHEN level_group = 'Level 1' THEN country END) AS 'Level 1',
+    MAX(CASE WHEN level_group = 'Level 2' THEN country END) AS 'Level 2',
+    MAX(CASE WHEN level_group = 'Level 3' THEN country END) AS 'Level 3',
+    MAX(CASE WHEN level_group = 'Level 4' THEN country END) AS 'Level 4'
 FROM( 
-	SELECT *,
-		ROW_NUMBER() OVER( PARTITION BY level_group ORDER BY level) AS rn
-	FROM (
-		SELECT *,
-			CASE
-			WHEN level_id >=1 AND level_id <=3 THEN 'Level 1'
-			WHEN level_id >=4 AND level_id <=6 THEN 'Level 2'
-			WHEN level_id >=7 AND level_id <=9 THEN 'Level 3'
-			WHEN level_id >=10 AND level_id <=12 THEN 'Level 4'
-			END AS level_group
-		FROM hierarchical_table
-	) 
+    SELECT *,
+            ROW_NUMBER() OVER( PARTITION BY level_group ORDER BY level_id) AS rn
+    FROM (
+            SELECT *,
+                CASE
+                WHEN level_id >=1 AND level_id <=3 THEN 'Level 1'
+                WHEN level_id >=4 AND level_id <=6 THEN 'Level 2'
+                WHEN level_id >=7 AND level_id <=9 THEN 'Level 3'
+                WHEN level_id >=10 AND level_id <=12 THEN 'Level 4'
+                END AS level_group
+            FROM hierarchical_table
+    ) 
 )GROUP BY rn;
