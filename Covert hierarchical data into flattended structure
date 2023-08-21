@@ -1,8 +1,8 @@
 CREATE TABLE hierarchical_table (
-	Level 1 TEXT NOT NULL,
-	Level 2 TEXT NOT NULL,
-	Level 3 TEXT NOT NULL,
-	Level 4 TEXT NOT NULL
+	Level1 TEXT NOT NULL,
+	Level2 TEXT NOT NULL,
+	Level3 TEXT NOT NULL,
+	Level4 TEXT NOT NULL
 )
 
 
