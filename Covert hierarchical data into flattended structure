@@ -3,7 +3,7 @@ CREATE TABLE hierarchical_table (
 	Level2 TEXT NOT NULL,
 	Level3 TEXT NOT NULL,
 	Level4 TEXT NOT NULL
-)
+);
 
 
 INSERT INTO hierarchical_table VALUES
