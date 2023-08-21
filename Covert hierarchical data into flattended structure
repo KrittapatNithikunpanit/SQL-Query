@@ -16,11 +16,11 @@ INSERT INTO hierarchical_table VALUES
     (11, "Highlands"),
     (12, "Derby");
 
---Assuming that we grouping data by level ID to be level_grouping as follow :
--- 1 >= Level ID <= 3 : Level 1
--- 4 >= Level ID <= 6 : Level 2
--- 7 >= Level ID <= 9 : Level 3
--- 10 >= Level ID <= 12 : Level 4
+--Assuming that we grouping data by level_id to be level_grouping as follow :
+-- 1 >= level_id <= 3 : Level 1
+-- 4 >= level_id <= 6 : Level 2
+-- 7 >= level_id <= 9 : Level 3
+-- 10 >= level_id <= 12 : Level 4
 -- So, there will be 4 level_group. Let’s write a query >>
 
 SELECT
